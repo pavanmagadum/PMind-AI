@@ -14,10 +14,10 @@ except ImportError:
 # ──────────────────────────────────────────────
 # PASTE YOUR API KEY HERE
 # ──────────────────────────────────────────────
-API_KEY = "AIzaSyBmuZJmpZjOg-FsjGVt51OLanb9cGFzeGM"
+API_KEY = "AIzaSyDrcxnIbagnJs2lqra96BtmaZigbArwAh0"
 
 # Using gemini-2.5-flash (best free tier limits)
-MODEL = "gemini-2.5-flash"
+MODEL = "gemini-flash-latest"
 
 SYSTEM_INSTRUCTION = (
     "You are a helpful, friendly, and knowledgeable AI assistant. "

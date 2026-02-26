@@ -9,6 +9,7 @@ function App() {
     const [isLoading, setIsLoading] = useState(false);
     const [mode, setMode] = useState('creative');
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const messagesEndRef = useRef(null);
 
     // Load theme preference on mount
@@ -102,12 +103,19 @@ function App() {
     };
 
     const toggleTheme = () => setIsDarkMode(!isDarkMode);
+    const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
     const goHome = () => { if (!isLoading) setMessages([]); };
 
     return (
         <div className={`app-viewport ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-            <aside className="sidebar">
-                <div className="sidebar-header" onClick={goHome} style={{ cursor: 'pointer' }}>
+            <button className="mobile-menu-btn" onClick={toggleSidebar}>
+                <LayoutGrid size={24} />
+            </button>
+
+            {isSidebarOpen && <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)}></div>}
+
+            <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
+                <div className="sidebar-header" onClick={() => { goHome(); setIsSidebarOpen(false); }} style={{ cursor: 'pointer' }}>
                     <img src="/logo.png" alt="PMind Logo" className="sidebar-logo" />
                     <span className="sidebar-brand-text">PMind AI</span>
                 </div>
@@ -123,10 +131,10 @@ function App() {
                 <div className="sidebar-section">
                     <label>INTELLIGENCE MODE</label>
                     <div className="mode-switch">
-                        <button className={mode === 'creative' ? 'active' : ''} onClick={() => setMode('creative')}>
+                        <button className={mode === 'creative' ? 'active' : ''} onClick={() => { setMode('creative'); setIsSidebarOpen(false); }}>
                             <Sparkles size={14} /> Creative
                         </button>
-                        <button className={mode === 'precise' ? 'active' : ''} onClick={() => setMode('precise')}>
+                        <button className={mode === 'precise' ? 'active' : ''} onClick={() => { setMode('precise'); setIsSidebarOpen(false); }}>
                             <Cpu size={14} /> Precise
                         </button>
                     </div>
@@ -136,7 +144,7 @@ function App() {
                     <label>DYNAMIC AGENTS</label>
                     <div className="suggestions-list">
                         {suggestions.map((s, idx) => (
-                            <button key={idx} className="suggestion-btn" onClick={() => handleSend(s.directive)}>
+                            <button key={idx} className="suggestion-btn" onClick={() => { handleSend(s.directive); setIsSidebarOpen(false); }}>
                                 <div className="sug-icon">{s.icon}</div>
                                 <div className="sug-text">
                                     <span className="sug-label">{s.label}</span>
@@ -148,7 +156,7 @@ function App() {
                 </div>
 
                 <div className="sidebar-footer">
-                    <button onClick={() => setMessages([])} className="action-pill danger">
+                    <button onClick={() => { setMessages([]); setIsSidebarOpen(false); }} className="action-pill danger">
                         <Trash2 size={16} /> New Chat
                     </button>
                 </div>
