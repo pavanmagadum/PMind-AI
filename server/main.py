@@ -22,7 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-API_KEY = os.getenv("GEMINI_API_KEY", 'AIzaSyDrcxnIbagnJs2lqra96BtmaZigbArwAh0')
+API_KEY = os.getenv("GEMINI_API_KEY", 'AIzaSyBFW1Uwv33J_GlZZ5z8SnleH2QJXyeErkc')
 MODEL_ID = "gemini-flash-latest"
 
 SYSTEM_INSTRUCTION = (
