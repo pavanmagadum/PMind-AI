@@ -279,12 +279,7 @@ function App() {
                                         <input type="text" placeholder="Ask PMind AI..." value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSend()} />
                                         <div className="send-btn-minimal" onClick={() => handleSend()}><Send size={22} /></div>
                                     </div>
-                                    <div className="input-actions" style={{borderTop:'1px solid var(--card-border)', marginTop:'0.75rem', paddingTop:'0.75rem', display:'flex', alignItems:'center', gap:'15px'}}>
-                                        <div className="action-item" style={{display:'flex', alignItems:'center', gap:'6px', fontSize:'0.8rem', fontWeight:'600', color:'var(--text-secondary)'}}><Plus size={16} /> <span style={{opacity:0.7}}>Tools</span></div>
-                                        <div className="action-item" style={{color:'var(--text-secondary)'}}><ImageIcon size={16} /></div>
-                                        <div className="action-item" style={{color:'var(--text-secondary)'}}><Mic size={16} /></div>
-                                        <div className="model-badge" style={{marginLeft:'auto', background:'rgba(0,217,139,0.1)', color:'var(--accent-mint)', padding:'4px 12px', borderRadius:'12px', fontSize:'0.75rem', fontWeight:'800'}}>PRO 3.5</div>
-                                    </div>
+                                    
                                 </div>
                                 <div className="chips-container">
                                     {QUICK_CHIPS.map((chip, i) => <button key={i} className="pill-chip" onClick={() => handleSend(chip.prompt)}><span>{chip.label}</span></button>)}
