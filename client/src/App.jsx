@@ -301,7 +301,7 @@ function App() {
                             <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSend()} placeholder="Ask anything..." disabled={isLoading} />
                             <button onClick={() => handleSend()} disabled={!input.trim() || isLoading} className="compact-send"><Send size={18} /></button>
                         </div>
-                        <div className="branding-row"><span>PMind AI Pro v2.5 • Developed by Pavan Magadum</span></div>
+                        <div className="branding-row"><span>PMind AI • Developed by Pavan Magadum</span></div>
                     </footer>
                 )}
             </main>
