@@ -7,6 +7,10 @@ from google import genai
 from google.genai import types
 import os
 from typing import List, Dict, Optional
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = FastAPI(
     title="Gemini Pro API",
@@ -22,7 +26,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-API_KEY = os.getenv("GEMINI_API_KEY", 'AIzaSyCQh9vNgSebzviyd3gkuh-1o562K5MVnjE')
+API_KEY = os.getenv("GEMINI_API_KEY")
 MODEL_ID = "gemini-flash-latest"
 
 SYSTEM_INSTRUCTION = (
@@ -36,7 +40,11 @@ SYSTEM_INSTRUCTION = (
     "Use markdown for clarity, but keep your responses concise and conversational."
 )
 
-client = genai.Client(api_key=API_KEY)
+if not API_KEY:
+    print("⚠️ WARNING: GEMINI_API_KEY is not set in your .env file!")
+    client = None
+else:
+    client = genai.Client(api_key=API_KEY)
 
 class GeminiEngine:
     async def generate_stream(self, history: List[Dict[str, str]], temperature: float = 0.7):
@@ -60,6 +68,9 @@ class GeminiEngine:
         )
 
         try:
+            if not client:
+                yield "⚠️ **Configuration Error**: GEMINI_API_KEY is missing. Please add it to your `.env` file and restart the server."
+                return
             stream = client.models.generate_content_stream(
                 model=MODEL_ID,
                 contents=contents,
@@ -71,10 +82,10 @@ class GeminiEngine:
         except Exception as e:
             error_str = str(e)
             if "429" in error_str or "RESOURCE_EXHAUSTED" in error_str:
-                yield "⚠️ **System Quota Reached**: You have reached the maximum allowed requests for your daily free tier. Please return tomorrow or wait for the reset to continue our session. Thank you for your patience!"
+                yield "⚠️ **Rate limit reached.** Please try again later."
             else:
                 print(f"Engine Error: {e}")
-                yield f"⚠️ **Neural Link Disruption**: {error_str}"
+                yield f"⚠️ **AI Error**: {error_str}"
 
 engine = GeminiEngine()
 

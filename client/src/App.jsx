@@ -167,14 +167,14 @@ function App() {
                 });
             }
         } catch (error) {
-            console.error("Streaming Error:", error);
+            console.error("Messaging Error:", error);
             setMessages((prev) => {
                 const next = [...prev];
-                if (next.length > 0) {
-                    const errMsg = `⚠️ **Reliability Alert**: AI Core connectivity issue.
-Details: ${error.message}
-Please ensure your backend server (main.py) is running on port 10000.`;
-                    next[next.length - 1] = { ...next[next.length - 1], content: errMsg };
+                if (next.length > 0 && next[next.length - 1].role === 'assistant') {
+                    next[next.length - 1] = {
+                        ...next[next.length - 1],
+                        content: '⚠️ **Unable to connect.** Please check if the server is running.'
+                    };
                 }
                 return next;
             });
