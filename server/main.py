@@ -84,16 +84,10 @@ async def chat(request: Request):
         data = await request.json()
         history = data.get("history", [])
         temperature = data.get("temperature", 0.7)
-        print(f"Chat request starting: {len(history)} messages")
-
         
         async def stream_wrapper():
-            try:
-                async for chunk in engine.generate_stream(history, temperature):
-                    yield chunk
-            except Exception as se:
-                print(f"Streaming Error: {se}")
-                yield f"⚠️ **Connection Error**: {str(se)}"
+            async for chunk in engine.generate_stream(history, temperature):
+                yield chunk
 
         return StreamingResponse(stream_wrapper(), media_type="text/plain")
     except Exception as e:
