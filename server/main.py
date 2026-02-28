@@ -22,7 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-API_KEY = os.getenv("GEMINI_API_KEY", 'AIzaSyBFW1Uwv33J_GlZZ5z8SnleH2QJXyeErkc')
+API_KEY = os.getenv("GEMINI_API_KEY", 'AIzaSyCQh9vNgSebzviyd3gkuh-1o562K5MVnjE')
 MODEL_ID = "gemini-flash-latest"
 
 SYSTEM_INSTRUCTION = (
@@ -84,10 +84,16 @@ async def chat(request: Request):
         data = await request.json()
         history = data.get("history", [])
         temperature = data.get("temperature", 0.7)
+        print(f"Chat request starting: {len(history)} messages")
+
         
         async def stream_wrapper():
-            async for chunk in engine.generate_stream(history, temperature):
-                yield chunk
+            try:
+                async for chunk in engine.generate_stream(history, temperature):
+                    yield chunk
+            except Exception as se:
+                print(f"Streaming Error: {se}")
+                yield f"⚠️ **Connection Error**: {str(se)}"
 
         return StreamingResponse(stream_wrapper(), media_type="text/plain")
     except Exception as e:

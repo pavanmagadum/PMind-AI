@@ -35,7 +35,7 @@ const CodeRenderer = React.memo(({ lang, inline, match, isDarkMode, children, ..
                 <div className="code-header">
                     <span className="code-lang">{lang.toUpperCase()}</span>
                     <button onClick={handleCopy} className="copy-btn">
-                        {copied ? <><Check size={14} /> <span>Copied!</span></> : <><Clipboard size={14} /> <span>Copy code</span></> }
+                        {copied ? <><Check size={14} /> <span>Copied!</span></> : <><Clipboard size={14} /> <span>Copy code</span></>}
                     </button>
                 </div>
                 <SyntaxHighlighter style={isDarkMode ? atomDark : oneLight} language={lang} PreTag="div" className="syntax-highlighter" {...props}>
@@ -171,7 +171,10 @@ function App() {
             setMessages((prev) => {
                 const next = [...prev];
                 if (next.length > 0) {
-                    next[next.length - 1] = { ...next[next.length - 1], content: '⚠️ **Reliability Alert**: AI Core connectivity issue. Please retry in a moment.' };
+                    const errMsg = `⚠️ **Reliability Alert**: AI Core connectivity issue.
+Details: ${error.message}
+Please ensure your backend server (main.py) is running on port 10000.`;
+                    next[next.length - 1] = { ...next[next.length - 1], content: errMsg };
                 }
                 return next;
             });
@@ -193,7 +196,7 @@ function App() {
     }, [isDarkMode]);
 
     if (authLoading) return (
-        <div className={`app-viewport ${isDarkMode ? 'dark-mode' : 'light-mode'}`} style={{justifyContent:'center', alignItems:'center'}}>
+        <div className={`app-viewport ${isDarkMode ? 'dark-mode' : 'light-mode'}`} style={{ justifyContent: 'center', alignItems: 'center' }}>
             <div className="premium-loader"><div className="glow-circle"></div></div>
         </div>
     );
@@ -273,13 +276,13 @@ function App() {
                                 <h1>{`Hi ${user.displayName ? user.displayName.split(' ')[0].toUpperCase() : 'USER'}`}</h1>
                                 <p>Where should we start today?</p>
                             </div>
-                            <div className="search-box-container" style={{width: '100%', maxWidth: '750px'}}>
+                            <div className="search-box-container" style={{ width: '100%', maxWidth: '750px' }}>
                                 <div className="unified-input-wrapper">
                                     <div className="input-row">
                                         <input type="text" placeholder="Ask PMind AI..." value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSend()} />
                                         <div className="send-btn-minimal" onClick={() => handleSend()}><Send size={22} /></div>
                                     </div>
-                                    
+
                                 </div>
                                 <div className="chips-container">
                                     {QUICK_CHIPS.map((chip, i) => <button key={i} className="pill-chip" onClick={() => handleSend(chip.prompt)}><span>{chip.label}</span></button>)}
