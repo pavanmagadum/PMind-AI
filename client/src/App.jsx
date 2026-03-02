@@ -138,7 +138,12 @@ function App() {
                 content: msg.content
             }));
 
-            const response = await fetch('http://localhost:10000/api/v1/chat', {
+            // DYNAMIC CLOUD URL: This will use your Render/Railway URL when deployed
+            const API_BASE_URL = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:10000`;
+            const apiUrl = `${API_BASE_URL}/api/v1/chat`;
+
+            const response = await fetch(apiUrl, {
+
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
